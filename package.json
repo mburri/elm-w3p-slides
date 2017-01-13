@@ -1,0 +1,20 @@
+{
+  "name": "elm-slides",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "elm-live src/Main.elm --open --port=8001 --path-to-elm-make=node_modules/.bin/elm-make  -- --output elm.js",
+    "debug": "npm start -- --debug"
+  },
+  "dependencies": {
+    "highlightjs": "^9.8.0"
+  },
+  "devDependencies": {
+    "elm": "^0.18.0",
+    "elm-live": "^2.6.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
