@@ -10,7 +10,7 @@ type Slide
 
 
 options =
-    { defaultOptions | smartypants = True }
+    { defaultOptions | smartypants = False }
 
 
 empty : Slide

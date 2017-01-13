@@ -11,12 +11,12 @@
  * GLOBAL STYLES
  *********************************************/
 body {
-  background: #fff;
-  background-color: #fff;
+  background: #1E5A96;
+  background-color: #1E5A96;
   font-family: "Roboto", sans-serif;
   font-size: 3rem;
   font-weight: 300;
-  color: #444; }
+  color: #fff; }
 
 ::-moz-selection {
   color: #fff;
