@@ -1,0 +1,20 @@
+[ ["![Puzzle ITC Logo](assets/puzzle_tagline_bg_rgb.svg)"
+]
+
+, [ "##W3P - Kafi \n#Elm \n\nA delightful language for reliable webapps.\n\n\nGenerate JavaScript with great performance and no runtime exceptions.\n\nhttp://elm-lang.org/"
+]
+
+, [ "##Agenda\n\n* What is Elm?\n* Why Elm?\n* The Elm Platform\n* The Elm Architecture\n* Redux and The Elm Architecture\n* Angular2 Components vs. Elm-Modules\n* Summary"
+]
+
+, [ "##What is Elm?\n\nElm is a *functional programming language* that *compiles* to JavaScript and *runs in the browser*"
+  , "##Why is it awesome?\n\n\n* functional (pure, immutable)\n* strongly typed (with type inference)\n* awesome compiler\n* debugger included\n* enforced semantic versioning for packages"
+  , "###Is it fast enough?\n\n* yes\n* http://elm-lang.org/blog/blazing-fast-html-round-two"
+]
+
+, [ "#Why Elm?"
+  , "###Undefined ...\n\n... is not a function"
+  , "### Main Problems in Software Development\n\n* Maintainability\n* Reliability"
+  , "### Maintanability vs. Ease of Use\n\n![](assets/maintanable-usable-1.png)"
+]
+]

@@ -1,4 +1,4 @@
-module Presentation exposing (Model, init, update, view, subscriptions)
+module Presentation exposing (Model, init, update, view, subscriptions, getJson)
 
 import Html exposing (Html, text)
 import Html.Attributes exposing (class)
@@ -7,6 +7,10 @@ import Keyboard exposing (KeyCode)
 import Markdown
 import Slide exposing (Slide)
 import Section exposing (Section)
+import Http
+import HttpBuilder
+import Debug
+import Json.Decode as Decode
 
 
 type alias Model =
@@ -18,24 +22,16 @@ type alias Model =
 
 init : Model
 init =
-    let
-        start =
-            Section [] titleSlide []
-
-        section1 =
-            Section [] whatIsElm []
-
-        section2 =
-            Section [] slide2 [ slide3 ]
-    in
-        { previousSections = []
-        , currentSection = start
-        , nextSections = [ section1, section2 ]
-        }
+    { previousSections = []
+    , currentSection = Section.empty
+    , nextSections = []
+    }
 
 
 type Msg
     = KeyDown KeyCode
+    | NewPresentation (List (List String))
+    | GetPresentationFailed Http.Error
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -43,6 +39,35 @@ update msg model =
     case msg of
         KeyDown keyCode ->
             ( handleKeyDown keyCode model, Cmd.none )
+
+        NewPresentation content ->
+            ( fromContent content, Cmd.none )
+
+        GetPresentationFailed error ->
+            let
+                _ =
+                    Debug.log "uups" error
+            in
+                ( model, Cmd.none )
+
+
+fromContent : List (List String) -> Model
+fromContent content =
+    { previousSections = []
+    , currentSection =
+        List.head content
+            |> Maybe.withDefault []
+            |> Section.fromList
+    , nextSections =
+        List.tail content
+            |> Maybe.withDefault []
+            |> nextSectionsFromList
+    }
+
+
+nextSectionsFromList : List (List String) -> List Section
+nextSectionsFromList sections =
+    List.map Section.fromList sections
 
 
 handleKeyDown : KeyCode -> Model -> Model
@@ -102,54 +127,37 @@ subscriptions model =
     Sub.batch [ Keyboard.downs KeyDown ]
 
 
-titleSlide : Slide
-titleSlide =
-    Slide.withContent
-        """
-![Puzzle ITC Logo](assets/puzzle_tagline_bg_rgb.svg)
+getJson : Cmd Msg
+getJson =
+    let
+        url =
+            "slides/presentation.json"
+    in
+        HttpBuilder.get url
+            |> HttpBuilder.withExpect (Http.expectJson decodePresentation)
+            |> HttpBuilder.send handleGetPresentationComplete
 
 
-## W3P Kafi - Elm
-"""
+handleGetPresentationComplete : Result Http.Error (List (List String)) -> Msg
+handleGetPresentationComplete result =
+    case result of
+        Ok presentation ->
+            NewPresentation presentation
+
+        Err error ->
+            GetPresentationFailed error
 
 
-whatIsElm : Slide
-whatIsElm =
-    Slide.withContent """
-#Elm
-A delightful language for reliable webapps.
-
-Generate JavaScript with great performance and no runtime exceptions.
-
-http://elm-lang.org/
+decodePresentation : Decode.Decoder (List (List String))
+decodePresentation =
+    Decode.list decodeSections
 
 
-
-"""
-
-
-slide2 : Slide
-slide2 =
-    Slide.withContent """
-
-# Second slide
-
-  1. do soem elm
-
-   ![](assets/maintanable-usable-1.png)
-"""
+decodeSections : Decode.Decoder (List String)
+decodeSections =
+    Decode.list decodeSlide
 
 
-slide3 : Slide
-slide3 =
-    Slide.withContent """
-
-# Third slide
-
-  it was really easy...
-
-      ~~~elm
-        add: Int -> Int -> Int
-        add x y = x + y
-      ~~~
-"""
+decodeSlide : Decode.Decoder String
+decodeSlide =
+    Decode.string

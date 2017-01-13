@@ -1,4 +1,4 @@
-module Slide exposing (Slide, empty, withContent, view)
+module Slide exposing (Slide(..), empty, withContent, view)
 
 import Markdown exposing (defaultOptions)
 import Html exposing (Html, div)
