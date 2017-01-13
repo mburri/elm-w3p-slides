@@ -16,5 +16,18 @@
   , "###Undefined ...\n\n... is not a function"
   , "### Main Problems in Software Development\n\n* Maintainability\n* Reliability"
   , "### Maintanability vs. Ease of Use\n\n![](assets/maintanable-usable-1.png)"
+  , "### Maintanability vs. Ease of Use\n\n![](assets/maintanable-usable-2.png)\n\n\n"
+  , "### Maintainability vs. Ease of Use\n\n![](assets/maintanable-usable-3.png)\n\n"
 ]
+,
+["# The Elm Platform\n\n\n"
+,"### Installation\n\n```\nnpm install -g elm\n```\n"
+,"### cli tools\n\n* elm-make\n* elm-package\n* elm-reactor\n* elm-repl\n\n"
+,"### Notable Community Tool\n\n* elm-format\n* elm-upgrade (0.17 -> 0.18)\n* elm-live (flexible dev server with live reloading)\n\n\n"
+],
+
+["# Elm by Example\n\n* Language basics\n* Hello World\n* Hello Elm Architecture\n\n\n\n"
+,"### Language basics - values\n\n```\n> x = 1\n1 : number\n\n> x = 1.1\n1.1 : Float\n\n> x = \"hello world\"\n\"hello world\" : String\n\n> x = [1, 2, 3, 4]\n[1,2,3,4] : List number\n\n> x = [\"a\", \"b\", \"c\"]\n[\"a\""
+]
+
 ]

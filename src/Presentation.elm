@@ -1,4 +1,4 @@
-module Presentation exposing (Model, init, update, view, subscriptions, getJson)
+module Presentation exposing (Model, init, update, view, subscriptions, create)
 
 import Html exposing (Html, text)
 import Html.Attributes exposing (class)
@@ -25,6 +25,14 @@ init =
     { previousSections = []
     , currentSection = Section.empty
     , nextSections = []
+    }
+
+
+create : Section -> List Section -> Model
+create current next =
+    { previousSections = []
+    , currentSection = current
+    , nextSections = next
     }
 
 
@@ -127,7 +135,8 @@ subscriptions model =
     Sub.batch [ Keyboard.downs KeyDown ]
 
 
-getJson : Cmd Msg
+
+{--getJson : Cmd Msg
 getJson =
     let
         url =
@@ -161,3 +170,4 @@ decodeSections =
 decodeSlide : Decode.Decoder String
 decodeSlide =
     Decode.string
+--}
