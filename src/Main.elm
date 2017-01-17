@@ -22,30 +22,31 @@ initPresentation =
 
 current : Section
 current =
-    Section.fromList titleSection
+    Section.fromList introduction
 
 
 next : List Section
 next =
     List.map Section.fromList
         [ introduction
-        , whatIsElm
-        , whyElm
+        , problems
+        , theElmWay
         , theElmPlatform
-        , elmByExample
-        , reduxComparison
+        , elmSyntax
+        , theElmArchitecture
         , elmContactsApp
+        , uncoveredStuff
+        , summary
         ]
-
-
-titleSection : List String
-titleSection =
-    [ """ ![Puzzle ITC Logo](assets/puzzle_tagline_bg_rgb.svg) """ ]
 
 
 introduction : List String
 introduction =
-    [ """ W3P - Kafi
+    [ """
+
+![Puzzle ITC Logo](assets/puzzle_tagline_bg_rgb.svg)
+
+W3P - Kafi
 
 #Elm
 A delightful language for reliable webapps.
@@ -57,63 +58,175 @@ http://elm-lang.org/
 """
     , """ ##Agenda
 
-* What is Elm?
-* Why Elm?
+* My Problems
+* The Elm Way
 * The Elm Platform
+* Elm Syntax
 * The Elm Architecture
-* Redux and The Elm Architecture
 * Angular2 Components vs. Elm-Modules
+* Things I did not cover today
 * Summary
 """
     ]
 
 
-whatIsElm : List String
-whatIsElm =
-    [ """ ## What is Elm?
+problems : List String
+problems =
+    [ """
+##My Problems...
 
-Elm is a *functional programming language* that *compiles* to JavaScript and *runs in the browser*
+(I'm biased!)
 
 """
-    , """ ### Why is it awesome?
+    , """
+### Sequence Diagramm of an object-oriented enterprise architecure
 
-* functional (pure, immutable)
-* strongly typed (with type inference)
-* awesome compiler
-* debugger included
-* enforced semantic versioning for packages
+![](assets/problems2.gif)
+
 """
-    , """ ### Is it fast enough?
+    , """
+### Side Effects
 
-* yes
-* http://elm-lang.org/blog/blazing-fast-html-round-two
+~~~java
+    protected void storeData(HttpServletRequest request, Kursp010SessionData d) {
+        getWorkflowContainer(request).setAttribute(KURSP010_DATA, d);
+        request.setAttribute(KURSP010_DATA, d);
+        d.setEmpty(false);
+    }
+~~~
+(c) ndbjs
+
+* ```getWorkflowContainer()``` from somewhere...
+    * ... and modify it
+* change an input parameter ```request```
+* change input parameter ```d```
+
+* where does the workflowcontainer come from?
+* ```request``` and ```d``` might be null
+
+"""
+    , """
+###Runtime Exceptions
+![](assets/problems1.gif)
+
+"""
+    , """
+### Runtime Exceptions
+
+* Stacktraces from Hell...
+* NPE
+
+~~~javascript
+undefined is not a function
+~~~
+
+"""
+    , """
+### Dynamic Types
+
+(Sorry hupf)
+
+~~~javascript
+function add(a, b) {
+    return a + b
+}
+
+add(1, 2)      // 3
+add({}, [])    // ?
+add(batman, robin)
+~~~
+
+"""
+    , """
+![](assets/batmanrobin.jpg)
+"""
+    , """
+### Unit Tests to the rescue!(?)
+
+Tests for:
+* Arguments might be null, undefined
+* Unexpected input (String instead of int...)
+* Mocking objects and methods
+
+
+* ... and finally test the application logic!
+
+"""
+    , """
+### Javascript Fatigue
+
+* Framework of the day...
+* angular, angular2, angular5, ember, cyclejs, capuccino, mojito, ...
+* NgRx, Ng2-redux, rxjs, redux, mobx, ...
+* vue, react, ...
+* immutable.js, ramda, lodash, underscore, ...
+* grunt, gulp, bower, webpack, broccoly, artichocke, ...
+* mocha, chai, jasmine, tape, QUnit...
+* ...
+
+"""
+    , """
+### Versioning in java and npm-land
+
+* SemVer?
+    * Sometimes...
+    * see breaking changes in angular2 release candidates
+
+=> Broken builds!
+
 """
     ]
 
 
-whyElm : List String
-whyElm =
-    [ """ ## Why Elm? """
-    , """ ### Undefined ...
+theElmWay : List String
+theElmWay =
+    [ """
+##The Elm Way
 
-... is not a function
+How does elm help with these problems?
 """
-    , """ ### Main Problems in Software Development
+    , """
+### Elm is a real Functional Language
 
-* Maintainability
-* Reliability
+* every function is pure
+* every value is immutable
+* side effects are handled by the runtime
+
+=> Reliable Code that is easy to reason about
 """
-    , """ ### Maintanability vs. Ease of Use
+    , """
+### No Runtime Exceptions
 
-![](assets/maintanable-usable-1.png)
+* No ```null```
+* No ```undefined is not a function```
+
+* NoRedInk, 80'000 LOC in Prod, 0 Runtime Exceptions in 1 Year
 """
-    , """ ### Maintainability vs. Ease of Use
+    , """
+### The Compiler...
 
-![](assets/maintanable-usable-2.png)
+... is your friend, not your enemy!
+
+* Friendly error messages
+   * helps you add features more quickly
+   * helps you refactor your code
 """
-    , """ ### Maintainability vs. Ease of Use
+    , """
+### It scales!
 
-![](assets/maintanable-usable-3.png)
+* Well-architected code that stays well-architected as your app grows
+"""
+    , """
+### Enforced semver
+
+Automatically enforced semantic versioning for all Elm packages
+"""
+    , """
+### Software development is fun again!
+
+Compiler + No Runtime Exceptions
+
+= If it compiles, it works!
 """
     ]
 
@@ -121,6 +234,8 @@ whyElm =
 theElmPlatform : List String
 theElmPlatform =
     [ """ ## The Elm Platform
+
+Getting started
 """
     , """ ### Installation
 
@@ -135,22 +250,73 @@ npm install -g elm
 * elm-reactor
 * elm-repl
 """
-    , """ ### Notable Community Tool
+    , """
+### elm-make
 
-* elm-format
-* elm-upgrade (0.17 -> 0.18)
-* elm-live (flexible dev server with live reloading)
+* compiles elm to javascript, html, css
+* helps you to write your app
+* friendly error messages
+* project setup
+   * elm-package.json
+   * elm-stuff/
+
+
+~~~
+elm-make          // generates elm-package.json
+
+elm-make Main.elm // generates index.html with javascript
+
+elm-make Main.elm --output app.js --debug // generates app.js, with debugger
+
+~~~
+
+"""
+    , """
+### elm-package
+
+* package manager (installation and publishing)
+* project setup
+   * elm-package.json
+   * elm-stuff/
+
+~~~
+elm-package install     // install packages from elm-package.json
+
+elm-package install elm-lang/navigation
+
+elm-package diff elm-lang/html 4.0.0 5.0.0
+~~~
+
+* enforces SemVer!
+    * No breaking changes in patch or minor releases!
+"""
+    , """
+### elm-repl
+
+* try it out
+
+"""
+    , """
+### elm-reactor
+
+* local dev server
+* quick start
+* but no custom index.html (yet)
+"""
+    , """
+### Try it online
+
+http://elm-lang.org/examples/hello-html
+
 """
     ]
 
 
-elmByExample : List String
-elmByExample =
-    [ """ ## Elm by Example
+elmSyntax : List String
+elmSyntax =
+    [ """ ## Elm Syntax
 
-* Language basics
-* Hello World
-* Hello Elm Architecture
+(I skip most of this for now...)
     """
     , """ ### Language basics - values
 
@@ -186,22 +352,21 @@ True : Bool
 > add a b = a + b
 <function> : number -> number -> number
 
-> add 1 2
-3 : number
+> add 1.2 2.3
+3.5 : Float
 
-> doubleMe n = n * 2
-<function> : number -> number
+> reverseToUpper a = String.reverse(String.toUpper a)
+<function> : String -> String
 
-> doubleMe 3
-6 : number
-
+> reverseToUpper "max"
+"XAM" : String
 
 ~~~
 """
     , """ ### Language basics - Lists
 
 ~~~elm
-> names = ["Jon", "Robert", "Eddard"]
+> names = "Jon" :: ["Robert", "Eddard"]
 ["Jon","Robert","Eddard"] : List String
 
 > List.isEmpty names
@@ -210,17 +375,21 @@ False : Bool
 > List.length names
 3 : Int
 
-> List.head names
-Just "Jon" : Maybe.Maybe String
 
-> numbers = [1, 2, 3, 4]
-[1,2,3,4] : List number
+> numbers = [3, 2, 1, 4]
+[3, 2, 1, 4] : List number
 
 > List.sort numbers
 [1,2,3,4] : List number
 
+> numbers
+[3,2,1,4] : List number
+
+List.map
+<function> : (a -> b) -> List a -> List b
+
 > List.map doubleMe numbers
-[2,4,6,8] : List number
+[6,4,2,8] : List number
 
 ~~~
 """
@@ -228,7 +397,7 @@ Just "Jon" : Maybe.Maybe String
 
 ~~~elm
 > point = { x = 2, y = 3 }
-{ x = 2, y = 3 } : { x : number, y : number1 }
+{ x = 2, y = 3 } : { x : number, y : number }
 
 > point.x
 2 : number
@@ -238,23 +407,6 @@ Just "Jon" : Maybe.Maybe String
 
 > List.map .x [point, point, point]
 [2,2,2] : List number
-
-~~~
-"""
-    , """ ### Language basics - Tuples
-
-~~~elm
-> validate name =
-      if name == "Jon" then
-          (True, "name is jon")
-      else
-          (False, "error on validating name")
-
-> validate "Jon"
-(True,"name is jon") : ( Bool, String )
-
-> validate "Robert"
-(False,"error on validating name") : ( Bool, String )
 
 ~~~
 """
@@ -273,41 +425,60 @@ Just "Jon" : Maybe.Maybe String
 > Line
 <function> : Point -> Point -> Shape
 
-> point1 = Point 3 4
-{ x = 3, y = 4 } : Point
-
-> point2 = Point 5 2
-{ x = 5, y = 2 } : Point
-
-> dot = Dot point1
-Dot { x = 3, y = 4 } : Shape
-
-> line = Line point2 point
-Line { x = 5, y = 2 } { x = 3, y = 4 } : Shape
-
-> line
-Line { x = 5, y = 2 } { x = 3, y = 4 } : Shape
-
+> List.filter
+<function> : (a -> Bool) -> List a -> List a
 ~~~
 """
-    , """ ### Language basics - If Expressions
+    , """ ### Pipes
 
 ~~~elm
-> isOver9000 score = if score > 9000 then "yes" else "sorry..."
-<function> : number -> String
+> 1 |> add 2
+3: number
 
-> isOver9000 100
-"sorry..." : String
+String.reverse(String.toUpper("hello world"))
+"DLROW OLLEH" : String
 
-> isOver9000 100000
-"yes" : String
+> "hello world" |> String.toUpper |> String.reverse
+"DLROW OLLEH" : String
 ~~~
 
-* else branch is not optional!
 """
-    , """ ### Language basics - Loops
+    , """ ### Maybe and Results
 
-* Sorry, no loops in Elm!
+~~~elm
+> List.head
+<function> : List a -> Maybe.Maybe a
+
+> List.head []
+Nothing : Maybe.Maybe a
+
+> List.head [1, 2, 3, 4]
+Just 1 : Maybe.Maybe number
+
+> List.filter
+<function> : (a -> Bool) -> List a -> List a
+
+> String.toInt
+<function:toInt> : String -> Result.Result String Int
+
+> String.toInt "123"
+Ok 123 : Result.Result String Int
+
+> String.toInt "abc"
+Err "could not convert string 'abc' to an Int" : Result.Result String Int
+~~~
+"""
+    , """
+### Pattern matching
+
+~~~elm
+case String.toInt userInput of
+    Ok value ->
+        { model | age = value }
+    Err error ->
+        { model | message = error }
+
+~~~
 """
     , """ ### Language basics - why types are awesome
 
@@ -317,9 +488,9 @@ Es6
 const add = (x, y) => { return x + y }
 add(1, 2)      // => 3
 
-add(1, "2")    // => ?
-
 x = add(1)     // => ?
+
+add(1, "2")    // => ?
 ~~~
 
 Elm
@@ -366,26 +537,6 @@ checks. So the problem may actually be in how previous arguments interact with
 the 2nd.
 ~~~
 """
-    , """ ### Hello World - adding numbers!
-
-~~~elm
-import Html exposing (text)
-
-add: Int -> Int -> Int
-add a b =
-    a + b
-
-
-x: Int
-x =
-    add 1 2
-
-main: Html Msg
-main =
-  text (toString x)
-
-~~~
-"""
     ]
 
 
@@ -394,20 +545,23 @@ theElmArchitecture =
     [ """ ## The Elm Architecture
     """
     , """ ### Elm-Architecture Overview
+![](assets/handling-user-input_01.png)
 
-"Framework" baked into to language - no package - no fatigue!
-
+[source](http://freecontent.manning.com/wp-content/uploads/handling-user-input_01.png)
+"""
+    , """ ### Elm-Architecture Overview
 * Model
    * Define the shape of your state
+
 * Update
-   * Return a new state
+   * Return a new state based on Msg and Model
+
 * View
    * Turn your model into Html
     """
     , """ ### Elm-Architecture Skeleton
 
 ~~~elm
-
 -- Model
 
 type alias Model = ...
@@ -416,8 +570,6 @@ init: Model
 init =
     ...
 
-
-
 -- Update
 
 type Msg = ...
@@ -425,7 +577,6 @@ type Msg = ...
 update: Msg -> Model -> Model
 update msg model =
     ...
-
 
 -- View
 
@@ -439,50 +590,85 @@ view model =
 
 ~~~elm
 main =
-    Html.program
-        { init = init
+    Html.beginnerProgram
+        { model = init
         , view = view
         , update = update
-        , subscriptions = subscriptions
         }
 ~~~
     """
-    , """ ### Elm-Architecture - Counter App
+    , """ ### Counter App
+"""
+    , """ ### Counter App - Model
+~~~elm
+type alias Model =
+    { count : Int
+    }
 
-Demo
 
-* time travel debugger included!
+init : Model
+init =
+    Model 0
+
+~~~
+"""
+    , """ ### Counter App - Update
+~~~elm
+type Msg
+    = Increment
+    | Decrement
+
+update : Msg -> Model -> Model
+update msg model =
+    case msg of
+        Increment ->
+            { model | count = model.count + 1 }
+
+        Decrement ->
+            { model | count = model.count - 1 }
+
+~~~
+"""
+    , """ ### Counter App - View
+~~~elm
+view : Model -> Html Msg
+view model =
+    div []
+        [ h1 [] [ text "counters" ]
+        , button [ onClick Decrement ] [ text "-" ]
+        , div [] [ text (toString model.count) ]
+        , button [ onClick Increment ] [ text "+" ]
+        ]
+
+~~~
+"""
+    , """ ### Counter App
+
+* Demo
+
+* Add a reset button
 
 """
-    , """ ### Counter App - Source Code
+    , """ ### Redux?
 
-Things to notice:
-
-* elm-format
-* Msg is a union type
-* update must cover all possible messages
-* no special syntax for the view
-* easy (and save) to add new features (reset)
-   * trust the compiler
-"""
-    ]
-
-
-reduxComparison : List String
-reduxComparison =
-    [ """ ## Redux
+* Redux is a predictable state container for JavaScript apps.
 
 "Redux evolves the ideas of Flux, but avoids its complexity by taking cues from Elm."
+
+* The whole state of your app is stored in an object tree inside a single store.
+* The only way to change the state tree is to emit an action, an object describing what happened.
+* To specify how the actions transform the state tree, you write pure reducers.
 
 https://github.com/reactjs/redux
         """
     , """ ### Counter App in React-Redux
 
-https://github.com/reactjs/redux/blob/master/examples/counter-vanilla/index.html
+https://github.com/reactjs/redux/tree/master/examples/counter
 
-* Actions + Constants => Msg
-* Reducers  => update + Model
-* Containers => View
+* Action        => Msg
+* Reducers      => Update
+* Store         => Model
+* Components    => View
         """
     ]
 
@@ -490,18 +676,230 @@ https://github.com/reactjs/redux/blob/master/examples/counter-vanilla/index.html
 elmContactsApp : List String
 elmContactsApp =
     [ """ ##elm-contacts-app
-    """
-    , """ ##elm-contacts-app
 
-No Components!
+Demo
     """
+    , """
+###NG2 Contacts-List Component
+
+~~~javascript
+import { Component, Input } from '@angular/core';
+import { ContactModel } from './contact.model';
+
+@Component({
+  selector: 'contacts-list',
+  template: `
+    <table>
+      <thead><tr><th>First name</th><th>Last name</th><th>Phone</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let contact of contacts">
+          <td><a [routerLink]="['/contacts', contact.id]">{{contact.first_name}}</a></td>
+          <td><a [routerLink]="['/contacts', contact.id]">{{contact.last_name}}</a></td>
+          <td><a [routerLink]="['/contacts', contact.id]">{{contact.phone}}</a></td>
+        </tr>
+      </tbody>
+    </table>`
+})
+export class ContactsListComponent {
+  @Input() contacts: ContactModel[];
+}
+
+~~~
+    """
+    , """
+###Elm Contacts-List
+
+~~~elm
+module View.ContactsList exposing (view)
+
+import Html exposing (Html, table, tbody, tr, td, text)
+import Html.Attributes exposing (value, class, type_)
+import Html.Events exposing (onClick, onInput)
+import Model.Contact exposing (Contact)
+import Update.Messages exposing (..)
+
+view : List Contact -> Html Msg
+view contacts =
+    table []
+        [ tbody []
+            (List.map viewContact contacts)
+        ]
+
+
+viewContact : Contact -> Html Msg
+viewContact contact =
+    tr [ onClick <| Select contact ]
+        [ td []
+            [ text contact.firstname ]
+        , td []
+            [ text contact.lastname ]
+        , td []
+            [ text contact.phone ]
+        ]
+~~~
+    """
+    , """ ###elm-contacts-app
+
+* Do not think in Components!
+* ... but in functions
+    """
+    , """ ###yagni
+
+* You ain't gonna need it!
+
+    """
+    , """
+###Keep it simple
+
+* Start with
+   * One ```Model```
+   * One ```Msg``` type
+   * One ```update``` function
+   * One ```view``` function
+"""
+      {--, """
+### Refactor when things get too big
+
+* Refactoring is easy and save in elm (thanks to the compiler and pure, immutable functions)
+"""
+    , """
+### When ```view``` gets too big
+
+* ```view``` is the first one to get really big
+* Split out functions, e.g:
+
+~~~elm
+viewContactList: List Contact -> Html Msg
+viewContactList contacts =
+    ...
+~~~
+"""
+    , """
+### When ```Model``` gets too big
+
+* Split the Record into smaller records
+~~~elm
+type alias Model =
+    { firstname: String
+    , lastName: String
+    , phone: String
+    }
+~~~
+
+becomes...
+
+~~~elm
+type alias Contact =
+    { firstname: String
+    , lastName: String
+    , phone: String
+    }
+
+type alias Model =
+    { selectedContact: Contact}
+~~~
+"""
+    , """
+### When ```update``` gets too big
+
+* Use helper functions
+"""--}
+    , """
+### When everything gets too big
+
+* It's probably no problem!
+* Elm is great at finding problems and making refactors easy
+"""
     ]
 
 
-template : List String
-template =
+uncoveredStuff : List String
+uncoveredStuff =
     [ """
+##Things I did not cover today """
+    , """
+### Performance
+
+* Elm uses Virtual Dom to diff the view
+* Seems to outperform React, Angular2 and Ember
+http://elm-lang.org/blog/blazing-fast-html-round-two
+
     """
     , """
+### Ports
+
+* Talk to Javascript, not add Javascript Code in the middle of Elm
+* Elm guarantees (no Runtime Exception in Elm) still holds up
+* Javascript-as-a-Service
+
+
+"""
+    , """
+### Make impossible State impossible
+
+~~~elm
+type alias Section =
+    { allSlides: List Slide
+    , current: Maybe Slide
+    -- , currentIndex: Int
+    }
+~~~
+
+* current slide may not be in the list of all slides!
+
+~~~elm
+type alias Section =
+    { previous: List Slide
+    , current: Slide
+    , next: List Slide}
+~~~
+
+* not exclusive to elm!
+* more boilerplate code, but more reliable and maintainable
+* Less unit tests
+
     """
+    , """
+###Unit Tests
+
+* [elm-community/elm-test](http://package.elm-lang.org/packages/elm-community/elm-test/latest)
+* Fuzz Tests included!
+"""
+    ]
+
+
+summary : List String
+summary =
+    [ """
+## Summary ... my Experience with Elm
+
+(Disclaimer: I'm not an expert!)
+    """
+    , """
+### It's confusing - sometimes
+
+* Json Decoders (turn Json into Elm Data)
+* Documentation (Package Docs)
+* It's different (Syntax, Thinking)
+* Changes from elm 0.17 to elm 0.18
+
+
+"""
+    , """
+### It's a great Experience...
+
+* Great Guide http://guide.elm-lang.org
+* New Concepts
+* Makes you a better programmer
+* Helps to understand and learn Angular2, React-Redux Codebases
+* It's fun!
+
+"""
+    , """
+### but...
+
+* Switching back to (Legacy) Java and Javascript (even Typescript) is...
+
+![](assets/omg.jpg)
+"""
     ]

@@ -38,7 +38,7 @@ body {
   width: 90%;
   margin: 2.5rem auto;
   text-align: left;
-  font-size: 0.75em;
+  font-size: 0.5em;
   font-family: monospace;
   line-height: 1.2em;
   word-wrap: break-word;
@@ -54,3 +54,8 @@ body {
   word-wrap: normal;
   background: #3F3F3F;
   color: #DCDCDC; }
+
+
+.slide img {
+    width: 60%
+}
